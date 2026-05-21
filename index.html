@@ -12,9 +12,6 @@
   
   <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css">
-  
-  <!-- Cloudflare Turnstile -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -40,19 +37,10 @@
         </a>
       </div>
 
-      <!-- Cloudflare Turnstile Widget -->
-      <div class="turnstile-container fade-up fade-up-delay-4" style="display: flex; justify-content: center; margin: 30px 0;">
-        <div class="cf-turnstile" 
-             data-sitekey="0x4AAAAADTnYxjmjHI5x5tM" 
-             data-callback="javascriptCallback"
-             data-theme="dark">
-        </div>
-      </div>
+      <div class="avatar fade-up fade-up-delay-4">🎮</div>
+      <div class="username fade-up fade-up-delay-5">@minhlords</div>
 
-      <div class="avatar fade-up fade-up-delay-5">🎮</div>
-      <div class="username fade-up fade-up-delay-6">@minhlords</div>
-
-      <footer class="fade-up fade-up-delay-7">
+      <footer class="fade-up fade-up-delay-6">
         © 2025 MINHLORDS • Contact: <a href="mailto:minhproacc@gmail.com">minhproacc@gmail.com</a>
       </footer>
     </div>
@@ -67,12 +55,5 @@
   
   <!-- Custom JS -->
   <script src="script.js"></script>
-  
-  <!-- Turnstile Callback -->
-  <script>
-    function javascriptCallback(token) {
-      console.log('Turnstile verified:', token);
-    }
-  </script>
 </body>
 </html>
