@@ -3,1069 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xác minh để vào trang</title>
+<title>Key System - Verify Access</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --accent: #6344ff;
-    --accent2: #a855f7;
-    --bg: #0a0a0f;
-    --card: #13131a;
-    --border: #2a2a3a;
-    --text: #f0f0ff;
-    --muted: #888;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-  }
-
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
   body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg);
     min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 20px;
   }
-
-  /* Grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(99,68,255,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(99,68,255,0.06) 1px, transparent 1px);
-    background-size: 32px 32px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
   .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    max-width: 420px;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Glow effect on card */
-  .card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(99,68,255,0.3), rgba(168,85,247,0.1), transparent);
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  .lock-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    background: #fff;
+    padding: 40px 35px;
     border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.25rem;
-    font-size: 28px;
-    box-shadow: 0 8px 24px rgba(99,68,255,0.3);
-  }
-
-  .badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    background: rgba(99,68,255,0.12);
-    border: 1px solid rgba(99,68,255,0.25);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12px;
-    color: #9a8aff;
-    width: fit-content;
-    margin: 0 auto 1.5rem;
-  }
-
-  h1 {
-    font-size: 21px;
-    font-weight: 600;
-    color: var(--text);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 420px;
     text-align: center;
-    margin-bottom: 10px;
   }
+  .logo {
+    width: 70px; height: 70px;
+    margin: 0 auto 15px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; color: #fff;
+  }
+  h1 { color: #333; font-size: 24px; margin-bottom: 8px; }
+  .subtitle { color: #777; font-size: 14px; margin-bottom: 25px; }
 
-  .subtitle {
-    font-size: 14px;
-    color: var(--muted);
+  .input-group { position: relative; margin-bottom: 15px; }
+  input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.25s;
     text-align: center;
-    margin-bottom: 2rem;
-    line-height: 1.65;
+    letter-spacing: 1px;
   }
+  input[type="text"]:focus { border-color: #667eea; }
 
-  .btn-primary {
+  .btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
     border: none;
-    border-radius: 12px;
-    color: #fff;
+    border-radius: 10px;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 4px 16px rgba(99,68,255,0.35);
+    transition: 0.25s;
+    margin-top: 10px;
   }
-  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-  .btn-primary:active { transform: translateY(0); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.4); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-  .status-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-top: 14px;
-    font-size: 13px;
-    color: var(--muted);
+  .btn-secondary {
+    background: #f0f2ff;
+    color: #667eea;
+    border: 2px solid #667eea;
   }
-
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #444;
-    flex-shrink: 0;
-    transition: background 0.3s;
-  }
-  .dot.pending { background: var(--warning); animation: pulse 1.2s infinite; }
-  .dot.success { background: var(--success); }
-  .dot.error   { background: var(--danger); }
-
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
+  .btn-secondary:hover { background: #667eea; color: #fff; }
 
   .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 1.5rem 0;
+    margin: 20px 0 10px;
+    color: #aaa;
+    font-size: 13px;
+    position: relative;
   }
-
-  .note {
-    font-size: 12px;
-    color: #555;
-    text-align: center;
-    line-height: 1.6;
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 35%;
+    height: 1px;
+    background: #e0e0e0;
   }
-  .note span { color: #666; }
+  .divider::before { left: 0; }
+  .divider::after { right: 0; }
 
-  /* Success view */
-  .success-view {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    text-align: center;
-  }
-  .success-view.show { display: flex; }
-
-  .success-icon {
-    width: 72px;
-    height: 72px;
-    background: rgba(34,197,94,0.12);
-    border: 2px solid rgba(34,197,94,0.3);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  }
-
-  @keyframes popIn {
-    from { transform: scale(0); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  .success-view h2 {
-    font-size: 21px;
-    font-weight: 600;
-    color: var(--success);
-  }
-
-  .success-view p {
+  .message {
+    margin-top: 18px;
+    padding: 12px;
+    border-radius: 8px;
     font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .btn-enter {
-    padding: 13px 36px;
-    background: var(--success);
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 4px 16px rgba(34,197,94,0.3);
-    margin-top: 0.5rem;
-  }
-  .btn-enter:hover { opacity: 0.88; transform: translateY(-1px); }
-
-  /* The actual protected content (hidden by default) */
-  #protectedContent {
     display: none;
   }
+  .message.success { background: #e6ffed; color: #1b7a3a; display: block; }
+  .message.error   { background: #ffe6e6; color: #b30000; display: block; }
+  .message.loading { background: #fff8e1; color: #8a6d00; display: block; }
 
-  /* ===== THAY NỘI DUNG BÊN TRONG ĐÂY ===== */
-  .site-content {
-    text-align: center;
-    padding: 2rem 0;
-    color: var(--text);
-  }
-  .site-content h1 {
-    font-size: 28px;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .site-content p {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.7;
-  }
+  .footer { margin-top: 25px; font-size: 12px; color: #aaa; }
 </style>
 </head>
 <body>
+  <div class="card">
+    <div class="logo">🔑</div>
+    <h1>Xác thực Key</h1>
+    <p class="subtitle">Nhập key của bạn để truy cập nội dung</p>
 
-<!-- ===== CỔng bảo vệ ===== -->
-<div class="card" id="gateCard">
-  <div id="gateView">
-    <div class="lock-icon">🔒</div>
-    <div class="badge">🔗 work.ink protection</div>
-    <h1>Nội dung được bảo vệ</h1>
-    <p class="subtitle">Hoàn thành xác minh work.ink để tiếp tục.<br>Bypass tool sẽ không hoạt động.</p>
-
-    <button class="btn-primary" id="startBtn" onclick="startVerification()">
-      <span>🚀</span>
-      <span>Bắt đầu xác minh</span>
-    </button>
-
-    <div class="status-box">
-      <div class="dot" id="dot"></div>
-      <span id="statusText">Chờ xác minh...</span>
+    <div class="input-group">
+      <input type="text" id="keyInput" placeholder="Nhập key tại đây..." autocomplete="off">
     </div>
 
-    <hr class="divider">
-    <p class="note">
-      ⚠️ Xác minh được thực hiện phía server — không thể bypass bằng JavaScript, DevTools, hoặc extension trình duyệt
-    </p>
-  </div>
-
-  <div class="success-view" id="successView">
-    <div class="success-icon">✅</div>
-    <h2>Xác minh thành công!</h2>
-    <p>Token work.ink hợp lệ đã được xác minh.<br>Bạn được phép truy cập nội dung.</p>
-    <button class="btn-enter" onclick="enterSite()">Vào trang →</button>
-  </div>
-</div>
-
-<!-- ===== NỘI DUNG ĐƯỢC BẢO VỆ (ẩn cho đến khi xác minh xong) ===== -->
-<div id="protectedContent" class="card site-content">
-  <!--
-    THAY TOÀN BỘ NỘI DUNG BÊN TRONG ĐÂY
-    bằng nội dung trang thực tế của bạn
-  -->
-  <h1>🎉 Chào mừng bạn!</h1>
-  <p>
-    Bạn đã hoàn thành xác minh work.ink thành công.<br>
-    Đây là nội dung bí mật của trang web.
-  </p>
-</div>
-
-<script>
-  // =============================================
-  // CẤU HÌNH — Thay các giá trị này
-  // =============================================
-  const CONFIG = {
-    apiKey: 'bca922f8-bd55-4586-9789-f5bb7fff0878',
-
-    // URL trang của bạn (nơi work.ink redirect về sau khi hoàn thành)
-    // Đảm bảo đây là URL thực tế khi deploy
-    callbackUrl: window.location.href.split('?')[0],
-
-    // Thời gian session hợp lệ (mili giây) — mặc định 30 phút
-    sessionDuration: 30 * 60 * 1000,
-  };
-
-  // =============================================
-  // LOGIC XÁC MINH
-  // =============================================
-  const SESSION_KEY = `wink_verified_${CONFIG.apiKey}`;
-  let pollInterval = null;
-  let verifyWindow = null;
-
-  function setStatus(msg, state = '') {
-    document.getElementById('statusText').textContent = msg;
-    document.getElementById('dot').className = 'dot ' + state;
-  }
-
-  function startVerification() {
-    const btn = document.getElementById('startBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span>⏳</span><span>Đang chờ...</span>';
-    setStatus('Đang mở work.ink...', 'pending');
-
-    // work.ink redirect về callbackUrl?verified=1&token=TOKEN sau khi hoàn thành
-    const redirectUrl = `${CONFIG.callbackUrl}?wink_token=PENDING&wink_done=1`;
-    const workInkLink = `https://work.ink/${CONFIG.apiKey}?r=${encodeURIComponent(redirectUrl)}`;
-
-    verifyWindow = window.open(workInkLink, 'worink_verify', 'width=620,height=720,scrollbars=yes,resizable=yes');
-
-    if (!verifyWindow || verifyWindow.closed) {
-      // Nếu popup bị chặn, mở trong tab mới
-      window.location.href = workInkLink;
-      return;
-    }
-
-    setStatus('Hoàn thành xác minh trong cửa sổ mới...', 'pending');
-    startPolling();
-  }
-
-  function startPolling() {
-    pollInterval = setInterval(() => {
-      // Kiểm tra URL hiện tại có token không (sau khi work.ink redirect về)
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('wink_done') === '1') {
-        clearInterval(pollInterval);
-        const token = params.get('wink_token') || '';
-        handleCallback(token);
-        return;
-      }
-
-      // Cửa sổ bị đóng sớm
-      if (verifyWindow && verifyWindow.closed) {
-        const p2 = new URLSearchParams(window.location.search);
-        if (p2.get('wink_done') !== '1') {
-          clearInterval(pollInterval);
-          setStatus('Cửa sổ đã đóng. Vui lòng thử lại.', 'error');
-          resetBtn();
-        }
-      }
-    }, 500);
-  }
-
-  async function handleCallback(token) {
-    setStatus('Đang xác minh token...', 'pending');
-
-    // Xoá query string khỏi URL (dọn dẹp)
-    const cleanUrl = window.location.pathname;
-    window.history.replaceState({}, document.title, cleanUrl);
-
-    if (!token || token === 'PENDING') {
-      // Token chưa có — work.ink có thể cần cấu hình webhook phía server
-      // Fallback: dùng session tạm thời (ít bảo mật hơn, nhưng dùng được cho demo)
-      handleFallback();
-      return;
-    }
-
-    // ============================================================
-    // XÁC MINH SERVER-SIDE (BẮT BUỘC cho bảo mật thực sự)
-    // Gọi backend của bạn để xác minh token với work.ink API
-    // Backend endpoint ví dụ: POST /api/verify-wink { token }
-    // ============================================================
-    try {
-      const res = await fetch('/api/verify-wink', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, apiKey: CONFIG.apiKey })
-      });
-      const data = await res.json();
-      if (data.success) {
-        grantAccess(token);
-      } else {
-        setStatus('Token không hợp lệ. Vui lòng thử lại.', 'error');
-        resetBtn();
-      }
-    } catch (err) {
-      // Backend chưa có — dùng work.ink API trực tiếp (CORS có thể bị chặn)
-      await verifyWithWorkInkDirect(token);
-    }
-  }
-
-  async function verifyWithWorkInkDirect(token) {
-    try {
-      const res = await fetch(`https://work.ink/api/verifyTask`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey: CONFIG.apiKey, token })
-      });
-      const data = await res.json();
-      if (data.success || data.valid || data.completed) {
-        grantAccess(token);
-      } else {
-        setStatus('Xác minh thất bại. Vui lòng thử lại.', 'error');
-        resetBtn();
-      }
-    } catch (err) {
-      handleFallback();
-    }
-  }
-
-  function handleFallback() {
-    // Fallback khi không có backend — lưu session tạm
-    // ⚠️ Ít bảo mật hơn — dùng tạm khi chưa có server
-    const sessionData = {
-      verified: true,
-      time: Date.now(),
-      expires: Date.now() + CONFIG.sessionDuration
-    };
-    try {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-    } catch(e) {}
-    grantAccess('session');
-  }
-
-  function grantAccess(token) {
-    const data = { verified: true, time: Date.now(), expires: Date.now() + CONFIG.sessionDuration };
-    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(data)); } catch(e) {}
-
-    document.getElementById('gateView').style.display = 'none';
-    document.getElementById('successView').classList.add('show');
-    setStatus('Đã xác minh thành công!', 'success');
-  }
-
-  function enterSite() {
-    document.getElementById('gateCard').style.display = 'none';
-    document.getElementById('protectedContent').style.display = 'block';
-  }
-
-  function resetBtn() {
-    const btn = document.getElementById('startBtn');
-    btn.disabled = false;
-    btn.innerHTML = '<span>🚀</span><span>Thử lại</span>';
-  }
-
-  // ============================================================
-  // KIỂM TRA SESSION KHI TẢI TRANG
-  // ============================================================
-  function checkExistingSession() {
-    // Kiểm tra nếu đang redirect về từ work.ink
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('wink_done') === '1') {
-      const token = params.get('wink_token') || '';
-      handleCallback(token);
-      return;
-    }
-
-    // Kiểm tra session đã lưu
-    try {
-      const raw = sessionStorage.getItem(SESSION_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        if (data.verified && data.expires > Date.now()) {
-          grantAccess('cached');
-          return;
-        } else {
-          sessionStorage.removeItem(SESSION_KEY);
-        }
-      }
-    } catch(e) {}
-  }
-
-  checkExistingSession();
-</script>
-
-<!--
-  ============================================================
-  HƯỚNG DẪN TÍCH HỢP SERVER-SIDE (BẮT BUỘC để chống bypass thật sự)
-  ============================================================
-
-  Cách hoạt động:
-  1. User mở work.ink → làm xong task
-  2. work.ink redirect về: yoursite.com?wink_token=TOKEN&wink_done=1
-  3. Trang này nhận token và gửi lên backend để xác minh
-  4. Backend gọi work.ink API: POST https://work.ink/api/verifyTask
-     { "apiKey": "bca922f8-...", "token": "TOKEN" }
-  5. Nếu hợp lệ → cho vào
-
-  Ví dụ backend Node.js (Express):
-  ---
-  app.post('/api/verify-wink', async (req, res) => {
-    const { token } = req.body;
-    const apiKey = 'bca922f8-bd55-4586-9789-f5bb7fff0878';
-    try {
-      const r = await fetch('https://work.ink/api/verifyTask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey, token })
-      });
-      const data = await r.json();
-      res.json({ success: data.success || data.valid || false });
-    } catch(e) {
-      res.json({ success: false });
-    }
-  });
-  ---
-
-  Không có backend → không thể chặn bypass thật sự.
-  ============================================================
--->
-</body>
-</html><!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xác minh để vào trang</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --accent: #6344ff;
-    --accent2: #a855f7;
-    --bg: #0a0a0f;
-    --card: #13131a;
-    --border: #2a2a3a;
-    --text: #f0f0ff;
-    --muted: #888;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-  }
-
-  body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-
-  /* Grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(99,68,255,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(99,68,255,0.06) 1px, transparent 1px);
-    background-size: 32px 32px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    max-width: 420px;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Glow effect on card */
-  .card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(99,68,255,0.3), rgba(168,85,247,0.1), transparent);
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  .lock-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.25rem;
-    font-size: 28px;
-    box-shadow: 0 8px 24px rgba(99,68,255,0.3);
-  }
-
-  .badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    background: rgba(99,68,255,0.12);
-    border: 1px solid rgba(99,68,255,0.25);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12px;
-    color: #9a8aff;
-    width: fit-content;
-    margin: 0 auto 1.5rem;
-  }
-
-  h1 {
-    font-size: 21px;
-    font-weight: 600;
-    color: var(--text);
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .subtitle {
-    font-size: 14px;
-    color: var(--muted);
-    text-align: center;
-    margin-bottom: 2rem;
-    line-height: 1.65;
-  }
-
-  .btn-primary {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 4px 16px rgba(99,68,255,0.35);
-  }
-  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-  .btn-primary:active { transform: translateY(0); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-  .status-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-top: 14px;
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #444;
-    flex-shrink: 0;
-    transition: background 0.3s;
-  }
-  .dot.pending { background: var(--warning); animation: pulse 1.2s infinite; }
-  .dot.success { background: var(--success); }
-  .dot.error   { background: var(--danger); }
-
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
-
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 1.5rem 0;
-  }
-
-  .note {
-    font-size: 12px;
-    color: #555;
-    text-align: center;
-    line-height: 1.6;
-  }
-  .note span { color: #666; }
-
-  /* Success view */
-  .success-view {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    text-align: center;
-  }
-  .success-view.show { display: flex; }
-
-  .success-icon {
-    width: 72px;
-    height: 72px;
-    background: rgba(34,197,94,0.12);
-    border: 2px solid rgba(34,197,94,0.3);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  }
-
-  @keyframes popIn {
-    from { transform: scale(0); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  .success-view h2 {
-    font-size: 21px;
-    font-weight: 600;
-    color: var(--success);
-  }
-
-  .success-view p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .btn-enter {
-    padding: 13px 36px;
-    background: var(--success);
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 4px 16px rgba(34,197,94,0.3);
-    margin-top: 0.5rem;
-  }
-  .btn-enter:hover { opacity: 0.88; transform: translateY(-1px); }
-
-  /* The actual protected content (hidden by default) */
-  #protectedContent {
-    display: none;
-  }
-
-  /* ===== THAY NỘI DUNG BÊN TRONG ĐÂY ===== */
-  .site-content {
-    text-align: center;
-    padding: 2rem 0;
-    color: var(--text);
-  }
-  .site-content h1 {
-    font-size: 28px;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .site-content p {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.7;
-  }
-</style>
-</head>
-<body>
-
-<!-- ===== CỔng bảo vệ ===== -->
-<div class="card" id="gateCard">
-  <div id="gateView">
-    <div class="lock-icon">🔒</div>
-    <div class="badge">🔗 work.ink protection</div>
-    <h1>Nội dung được bảo vệ</h1>
-    <p class="subtitle">Hoàn thành xác minh work.ink để tiếp tục.<br>Bypass tool sẽ không hoạt động.</p>
-
-    <button class="btn-primary" id="startBtn" onclick="startVerification()">
-      <span>🚀</span>
-      <span>Bắt đầu xác minh</span>
+    <button class="btn btn-primary" id="verifyBtn" onclick="verifyKey()">
+      Xác thực Key
     </button>
 
-    <div class="status-box">
-      <div class="dot" id="dot"></div>
-      <span id="statusText">Chờ xác minh...</span>
-    </div>
+    <div class="divider">hoặc</div>
 
-    <hr class="divider">
-    <p class="note">
-      ⚠️ Xác minh được thực hiện phía server — không thể bypass bằng JavaScript, DevTools, hoặc extension trình duyệt
-    </p>
+    <button class="btn btn-secondary" onclick="getKey()">
+      🎁 Nhận Key miễn phí
+    </button>
+
+    <div class="message" id="message"></div>
+
+    <div class="footer">Powered by work.ink</div>
   </div>
-
-  <div class="success-view" id="successView">
-    <div class="success-icon">✅</div>
-    <h2>Xác minh thành công!</h2>
-    <p>Token work.ink hợp lệ đã được xác minh.<br>Bạn được phép truy cập nội dung.</p>
-    <button class="btn-enter" onclick="enterSite()">Vào trang →</button>
-  </div>
-</div>
-
-<!-- ===== NỘI DUNG ĐƯỢC BẢO VỆ (ẩn cho đến khi xác minh xong) ===== -->
-<div id="protectedContent" class="card site-content">
-  <!--
-    THAY TOÀN BỘ NỘI DUNG BÊN TRONG ĐÂY
-    bằng nội dung trang thực tế của bạn
-  -->
-  <h1>🎉 Chào mừng bạn!</h1>
-  <p>
-    Bạn đã hoàn thành xác minh work.ink thành công.<br>
-    Đây là nội dung bí mật của trang web.
-  </p>
-</div>
 
 <script>
-  // =============================================
-  // CẤU HÌNH — Thay các giá trị này
-  // =============================================
-  const CONFIG = {
-    apiKey: 'bca922f8-bd55-4586-9789-f5bb7fff0878',
+  // ====== CẤU HÌNH ======
+  const WORKINK_LINK = "https://work.ink/2m7a/awighiafisghaihsdfasfwr";
+  const DESTINATION_URL = "https://minhlords.qzz.io";
 
-    // URL trang của bạn (nơi work.ink redirect về sau khi hoàn thành)
-    // Đảm bảo đây là URL thực tế khi deploy
-    callbackUrl: window.location.href.split('?')[0],
-
-    // Thời gian session hợp lệ (mili giây) — mặc định 30 phút
-    sessionDuration: 30 * 60 * 1000,
-  };
-
-  // =============================================
-  // LOGIC XÁC MINH
-  // =============================================
-  const SESSION_KEY = `wink_verified_${CONFIG.apiKey}`;
-  let pollInterval = null;
-  let verifyWindow = null;
-
-  function setStatus(msg, state = '') {
-    document.getElementById('statusText').textContent = msg;
-    document.getElementById('dot').className = 'dot ' + state;
+  // Hiển thị thông báo
+  function showMessage(text, type) {
+    const msg = document.getElementById('message');
+    msg.textContent = text;
+    msg.className = 'message ' + type;
   }
 
-  function startVerification() {
-    const btn = document.getElementById('startBtn');
+  // Lấy key - mở link work.ink
+  function getKey() {
+    window.open(WORKINK_LINK, '_blank');
+  }
+
+  // Xác thực key qua API work.ink
+  async function verifyKey() {
+    const key = document.getElementById('keyInput').value.trim();
+    const btn = document.getElementById('verifyBtn');
+
+    if (!key) {
+      showMessage('⚠️ Vui lòng nhập key!', 'error');
+      return;
+    }
+
     btn.disabled = true;
-    btn.innerHTML = '<span>⏳</span><span>Đang chờ...</span>';
-    setStatus('Đang mở work.ink...', 'pending');
+    btn.textContent = 'Đang kiểm tra...';
+    showMessage('Đang xác thực với máy chủ...', 'loading');
 
-    // work.ink redirect về callbackUrl?verified=1&token=TOKEN sau khi hoàn thành
-    const redirectUrl = `${CONFIG.callbackUrl}?wink_token=PENDING&wink_done=1`;
-    const workInkLink = `https://work.ink/${CONFIG.apiKey}?r=${encodeURIComponent(redirectUrl)}`;
-
-    verifyWindow = window.open(workInkLink, 'worink_verify', 'width=620,height=720,scrollbars=yes,resizable=yes');
-
-    if (!verifyWindow || verifyWindow.closed) {
-      // Nếu popup bị chặn, mở trong tab mới
-      window.location.href = workInkLink;
-      return;
-    }
-
-    setStatus('Hoàn thành xác minh trong cửa sổ mới...', 'pending');
-    startPolling();
-  }
-
-  function startPolling() {
-    pollInterval = setInterval(() => {
-      // Kiểm tra URL hiện tại có token không (sau khi work.ink redirect về)
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('wink_done') === '1') {
-        clearInterval(pollInterval);
-        const token = params.get('wink_token') || '';
-        handleCallback(token);
-        return;
-      }
-
-      // Cửa sổ bị đóng sớm
-      if (verifyWindow && verifyWindow.closed) {
-        const p2 = new URLSearchParams(window.location.search);
-        if (p2.get('wink_done') !== '1') {
-          clearInterval(pollInterval);
-          setStatus('Cửa sổ đã đóng. Vui lòng thử lại.', 'error');
-          resetBtn();
-        }
-      }
-    }, 500);
-  }
-
-  async function handleCallback(token) {
-    setStatus('Đang xác minh token...', 'pending');
-
-    // Xoá query string khỏi URL (dọn dẹp)
-    const cleanUrl = window.location.pathname;
-    window.history.replaceState({}, document.title, cleanUrl);
-
-    if (!token || token === 'PENDING') {
-      // Token chưa có — work.ink có thể cần cấu hình webhook phía server
-      // Fallback: dùng session tạm thời (ít bảo mật hơn, nhưng dùng được cho demo)
-      handleFallback();
-      return;
-    }
-
-    // ============================================================
-    // XÁC MINH SERVER-SIDE (BẮT BUỘC cho bảo mật thực sự)
-    // Gọi backend của bạn để xác minh token với work.ink API
-    // Backend endpoint ví dụ: POST /api/verify-wink { token }
-    // ============================================================
     try {
-      const res = await fetch('/api/verify-wink', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, apiKey: CONFIG.apiKey })
-      });
+      // Gọi API work.ink với proxy CORS
+      const apiUrl = `https://work.ink/_api/v2/token/isValid/${key}?deleteToken=1`;
+      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
+      
+      const res = await fetch(proxyUrl);
       const data = await res.json();
-      if (data.success) {
-        grantAccess(token);
+
+      if (data.valid === true) {
+        showMessage('✅ Key hợp lệ! Đang chuyển hướng...', 'success');
+        setTimeout(() => {
+          window.location.href = DESTINATION_URL;
+        }, 1200);
       } else {
-        setStatus('Token không hợp lệ. Vui lòng thử lại.', 'error');
-        resetBtn();
+        showMessage('❌ Key không hợp lệ hoặc đã hết hạn!', 'error');
       }
     } catch (err) {
-      // Backend chưa có — dùng work.ink API trực tiếp (CORS có thể bị chặn)
-      await verifyWithWorkInkDirect(token);
+      console.error(err);
+      showMessage('⚠️ Lỗi kết nối máy chủ. Vui lòng thử lại.', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Xác thực Key';
     }
   }
 
-  async function verifyWithWorkInkDirect(token) {
-    try {
-      const res = await fetch(`https://work.ink/api/verifyTask`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey: CONFIG.apiKey, token })
-      });
-      const data = await res.json();
-      if (data.success || data.valid || data.completed) {
-        grantAccess(token);
-      } else {
-        setStatus('Xác minh thất bại. Vui lòng thử lại.', 'error');
-        resetBtn();
-      }
-    } catch (err) {
-      handleFallback();
-    }
-  }
-
-  function handleFallback() {
-    // Fallback khi không có backend — lưu session tạm
-    // ⚠️ Ít bảo mật hơn — dùng tạm khi chưa có server
-    const sessionData = {
-      verified: true,
-      time: Date.now(),
-      expires: Date.now() + CONFIG.sessionDuration
-    };
-    try {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-    } catch(e) {}
-    grantAccess('session');
-  }
-
-  function grantAccess(token) {
-    const data = { verified: true, time: Date.now(), expires: Date.now() + CONFIG.sessionDuration };
-    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(data)); } catch(e) {}
-
-    document.getElementById('gateView').style.display = 'none';
-    document.getElementById('successView').classList.add('show');
-    setStatus('Đã xác minh thành công!', 'success');
-  }
-
-  function enterSite() {
-    document.getElementById('gateCard').style.display = 'none';
-    document.getElementById('protectedContent').style.display = 'block';
-  }
-
-  function resetBtn() {
-    const btn = document.getElementById('startBtn');
-    btn.disabled = false;
-    btn.innerHTML = '<span>🚀</span><span>Thử lại</span>';
-  }
-
-  // ============================================================
-  // KIỂM TRA SESSION KHI TẢI TRANG
-  // ============================================================
-  function checkExistingSession() {
-    // Kiểm tra nếu đang redirect về từ work.ink
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('wink_done') === '1') {
-      const token = params.get('wink_token') || '';
-      handleCallback(token);
-      return;
-    }
-
-    // Kiểm tra session đã lưu
-    try {
-      const raw = sessionStorage.getItem(SESSION_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        if (data.verified && data.expires > Date.now()) {
-          grantAccess('cached');
-          return;
-        } else {
-          sessionStorage.removeItem(SESSION_KEY);
-        }
-      }
-    } catch(e) {}
-  }
-
-  checkExistingSession();
-</script>
-
-<!--
-  ============================================================
-  HƯỚNG DẪN TÍCH HỢP SERVER-SIDE (BẮT BUỘC để chống bypass thật sự)
-  ============================================================
-
-  Cách hoạt động:
-  1. User mở work.ink → làm xong task
-  2. work.ink redirect về: yoursite.com?wink_token=TOKEN&wink_done=1
-  3. Trang này nhận token và gửi lên backend để xác minh
-  4. Backend gọi work.ink API: POST https://work.ink/api/verifyTask
-     { "apiKey": "bca922f8-...", "token": "TOKEN" }
-  5. Nếu hợp lệ → cho vào
-
-  Ví dụ backend Node.js (Express):
-  ---
-  app.post('/api/verify-wink', async (req, res) => {
-    const { token } = req.body;
-    const apiKey = 'bca922f8-bd55-4586-9789-f5bb7fff0878';
-    try {
-      const r = await fetch('https://work.ink/api/verifyTask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey, token })
-      });
-      const data = await r.json();
-      res.json({ success: data.success || data.valid || false });
-    } catch(e) {
-      res.json({ success: false });
-    }
+  // Cho phép nhấn Enter để verify
+  document.getElementById('keyInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') verifyKey();
   });
-  ---
-
-  Không có backend → không thể chặn bypass thật sự.
-  ============================================================
--->
+</script>
 </body>
 </html>
