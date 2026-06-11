@@ -1,0 +1,5 @@
+ÿþ&cls
+@echo off
+chcp 65001 >nul
+curl.exe ascii.live/rick
+pause
